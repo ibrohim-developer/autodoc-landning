@@ -1,0 +1,85 @@
+@import "tailwindcss";
+@import "./assets/font/font.css";
+
+@theme {
+  --font-sans: "EBGaramond", "EB Garamond", serif;
+  --font-serif: "EBGaramond", "EB Garamond", serif;
+  --font-display: "EBGaramond", "EB Garamond", serif;
+  --font-mono: "GeistMono", "SFMono-Regular", "Consolas", monospace;
+  --font-bebas: "BebasNeue";
+  /* fonts end */
+  --color-white10: #ffffff1a;
+  --color-white12: #ffffff1f;
+  --color-white15: #ffffff26;
+  --color-white20: #ffffff33;
+  --color-black60: #00000099;
+  --color-black21: #212121;
+  --color-black30: #0000004d;
+  --color-d5: #d5d5d5;
+  --color-limon: #a3c42633;
+  --color-green: #2f8a3d;
+}
+
+:root {
+  --bg-black: #000000;
+  --bg-main: #121417;
+  --bg-surface: #1e2024;
+  --bg-badge: #2b2f36;
+
+  --text-primary: #ffffff;
+  --text-secondary: #e1e3e8;
+  --text-muted: #8c929e;
+
+  --accent-cyan: #62c4e5;
+  --bg-cyan-subtle: rgba(98, 196, 229, 0.15);
+
+  --accent-green: #89e582;
+  --bg-green-subtle: rgba(137, 229, 130, 0.15);
+
+  --accent-amber: #e7ba7a;
+  --bg-amber-subtle: rgba(231, 186, 122, 0.15);
+
+  --accent-lime: #d2f843;
+}
+
+html {
+  color-scheme: dark;
+  font-family: "EBGaramond", "EB Garamond", serif;
+}
+
+body {
+  font-family: "EBGaramond", "EB Garamond", serif;
+  background: var(--bg-black);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
