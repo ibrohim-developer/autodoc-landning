@@ -1,20 +1,16 @@
 import Images from "@/assets/images";
-import { AdvertisingCard } from "@/components";
 import {
-  fadeUp,
-  fadeUpCard,
   fadeUpHero,
-  fadeUpItem,
   overlayFade,
-  REVEAL_VIEWPORT,
   stagger,
 } from "@/helper/motion";
-import { Vacancies } from "@/sections";
+import { IdeaToResult, Vacancies } from "@/sections";
 import { motion } from "motion/react";
 import { useTranslation } from "react-i18next";
 
 const Career = () => {
   const { t } = useTranslation();
+  /*
   const list = [
     {
       img: Images.advetising1,
@@ -37,6 +33,7 @@ const Career = () => {
       desc: t("modernWorkEnvironmentDesc"),
     },
   ];
+  */
   return (
     <>
       <motion.section
@@ -66,7 +63,7 @@ const Career = () => {
         className="bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${Images.paper})` }}
       >
-        <div className="max-xl:px-4 lg:py-22.5 py-12">
+        {/* <div className="max-xl:px-4 lg:py-22.5 py-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -87,7 +84,8 @@ const Career = () => {
               {t("nationalScaleProjectsDesc")}
             </motion.div>
           </motion.div>
-        </div>
+        </div> */}
+        {/*
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -101,6 +99,8 @@ const Career = () => {
             </motion.div>
           ))}
         </motion.div>
+        */}
+        <IdeaToResult />
         <Vacancies />
       </section>
     </>

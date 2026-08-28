@@ -21,6 +21,8 @@ import vectorRight from "./vectorRight.svg";
 import historyHolding from "./historyHolding.png";
 import projects from "./projects.png";
 import career from "./career.png";
+import careerWave from "./careerWave.webp";
+import careerLogo from "./careerLogo.webp";
 import paper from "./paper.png";
 import partnersBg from "./partners.png";
 import contactsBg from "./contactsBg.png";
@@ -153,6 +155,8 @@ export const Images = {
   historyHolding,
   projects,
   paper,
+  careerWave,
+  careerLogo,
   career,
   partnersBg,
   contactsBg,

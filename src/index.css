@@ -17,6 +17,7 @@
   --color-white20: #ffffff33;
   --color-black60: #00000099;
   --color-black21: #212121;
+  --color-gray56: #565656;
   --color-black30: #0000004d;
   --color-d5: #d5d5d5;
   --color-limon: #a3c42633;
@@ -62,6 +63,12 @@
   --nav-rule: clamp(1rem, 1.9vw, 1.6875rem);        /* 16 -> 27  (h-6.75)    */
   /* height the bar actually occupies - use for page top clearance */
   --nav-h: calc(var(--nav-logo) + var(--nav-pad-y) * 2);
+
+  /* Fill shared by every navbar panel and by the menu bar while it is open -
+     the two meet edge to edge, so they have to be the same value or the seam
+     shows. Same translucent black as the pills' own .nav-bg, so an open panel
+     reads as more of the same surface the bar is made of. */
+  --nav-panel-bg: #0000004d;
 
 }
 

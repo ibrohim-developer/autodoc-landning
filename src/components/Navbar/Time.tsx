@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getCityTime, getGMT, getTimeByOffset } from "@/helper/utils";
 import { useTranslation } from "react-i18next";
+import useDropdown from "./useDropdown";
 
 interface Props {
   className?: string;
@@ -8,6 +9,7 @@ interface Props {
 
 const Time = ({ className }: Props) => {
   const { t } = useTranslation();
+  const { open, ref, toggle } = useDropdown<HTMLDivElement>();
   const cities = [
     {
       name: t("timezoneLondonDublinLisbon"),
@@ -79,17 +81,20 @@ const Time = ({ className }: Props) => {
 
   return (
     <div
-      className={`nav-bg dropdown rounded-xl py-[var(--nav-pad-y)] px-[var(--nav-pad-x)] flex items-center gap-[var(--nav-gap)] ${className}`}
+      ref={ref}
+      onClick={toggle}
+      aria-expanded={open}
+      className={`nav-bg dropdown time-dropdown rounded-xl py-[var(--nav-pad-y)] px-[var(--nav-pad-x)] flex items-center gap-[var(--nav-gap)] ${className} ${
+        open ? "is-open" : ""
+      }`}
     >
-      <div className="text-[length:var(--nav-text)] leading-[0.8]">
-        {t("uzbekistan")} ({getGMT(uzbekistanTimezone)})
+      {/* The pill shows the clock alone; the country and GMT offset stay in the
+          panel below, where the other zones give them context. */}
+      <div className="text-[length:var(--nav-clock)] leading-[0.8]">
+        {uzbekistanTime}
       </div>
 
-      <div className="h-[var(--nav-rule)] w-px bg-[#D9D9D9]"></div>
-
-      <div className="text-[length:var(--nav-clock)] leading-[0.8]">{uzbekistanTime}</div>
-
-      <div className="dropdown-container">
+      <div className="dropdown-container" onClick={(e) => e.stopPropagation()}>
         {/* Uzbekistan */}
         <div className="flex items-center gap-3 bg-black30 backdrop-blur-[25.7px] rounded-xl py-4 px-5">
           <div className="text-[20px] w-52 leading-[0.8]">

@@ -9,6 +9,7 @@ import AreasOfActivity from "./AreasOfActivity";
 import Vacancies from "./Vacancies";
 import Feedback from "./Feedback";
 import Reels from "./Reels";
+import IdeaToResult from "./IdeaToResult";
 
 export {
   Video,
@@ -22,4 +23,5 @@ export {
   Vacancies,
   Feedback,
   Reels,
+  IdeaToResult,
 };
