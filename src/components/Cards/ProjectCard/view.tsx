@@ -34,7 +34,7 @@ const ProjectCard = ({ card, className, showYear = false }: Props) => {
         </div>
       </div>
       <img
-        className="w-full object-cover min-[1280px]:max-[1700px]:h-40 h-63.5 max-sm:h-40"
+        className="w-full object-cover h-63.5 max-sm:h-40"
         src={card?.image}
         alt=""
       />

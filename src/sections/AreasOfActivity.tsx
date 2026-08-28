@@ -412,7 +412,12 @@ const AreasOfActivity = () => {
                       ease: [0.22, 1, 0.36, 1],
                     }}
                   >
-                    <AreaCard card={project} number={index + 1} key={index} />
+                    <AreaCard
+                      card={project}
+                      number={index + 1}
+                      showTitle={project.category === "paymentSystems"}
+                      key={index}
+                    />
                   </motion.div>
                 ))}
               </motion.div>

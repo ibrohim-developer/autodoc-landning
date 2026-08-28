@@ -79,15 +79,15 @@ const Time = ({ className }: Props) => {
 
   return (
     <div
-      className={`nav-bg dropdown rounded-xl py-4 px-5 flex items-center gap-8 ${className}`}
+      className={`nav-bg dropdown rounded-xl py-[var(--nav-pad-y)] px-[var(--nav-pad-x)] flex items-center gap-[var(--nav-gap)] ${className}`}
     >
-      <div className="text-[20px] leading-[0.8]">
+      <div className="text-[length:var(--nav-text)] leading-[0.8]">
         {t("uzbekistan")} ({getGMT(uzbekistanTimezone)})
       </div>
 
-      <div className="h-6.75 w-px bg-[#D9D9D9]"></div>
+      <div className="h-[var(--nav-rule)] w-px bg-[#D9D9D9]"></div>
 
-      <div className="text-[32px] leading-[0.8]">{uzbekistanTime}</div>
+      <div className="text-[length:var(--nav-clock)] leading-[0.8]">{uzbekistanTime}</div>
 
       <div className="dropdown-container">
         {/* Uzbekistan */}

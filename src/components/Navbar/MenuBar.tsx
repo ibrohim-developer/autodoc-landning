@@ -2,9 +2,12 @@ import { routerPaths } from "@/app/routerPaths";
 import Images from "@/assets/images";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useEffect, useRef, useState } from "react";
 
 const MenuBar = () => {
   const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
   const list = [
     {
       name: t("home"),
@@ -39,17 +42,42 @@ const MenuBar = () => {
       to: routerPaths.contacts,
     },
   ];
+
+  useEffect(() => {
+    if (!open) return;
+    const onPointerDown = (e: PointerEvent) => {
+      if (!ref.current?.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [open]);
+
   return (
-    <div className="nav-bg dropdown max-sm:w-full mr-8 rounded-xl py-4 px-6 flex items-center sm:gap-16.5 gap-8 max-sm:justify-between">
-      <img src={Images.menuburger} alt="" />
+    <div
+      ref={ref}
+      onMouseLeave={() => setOpen(false)}
+      className={`nav-bg dropdown menu-dropdown max-sm:w-full mr-[var(--nav-gap)] rounded-xl py-[var(--nav-pad-y)] px-[var(--nav-pad-x-menu)] flex items-center sm:gap-[var(--nav-gap-menu)] gap-[var(--nav-gap)] max-sm:justify-between ${
+        open ? "is-open" : ""
+      }`}
+    >
+      <img
+        src={Images.menuburger}
+        alt=""
+        onClick={() => setOpen(true)}
+        className="w-[var(--nav-icon)]"
+      />
       <Link to={routerPaths.home}>
-        <img src={Images.AutodocLight} alt="" />
+        <img
+          src={Images.AutodocLight}
+          alt=""
+          className="h-[var(--nav-logo)] w-auto"
+        />
       </Link>
-      <img src={Images.phone} alt="" />
+      <img src={Images.phone} alt="" className="w-[var(--nav-icon-sm)]" />
       <div className="dropdown-container max-sm:w-full">
         <div className="py-4 flex items-center max-sm:justify-between sm:gap-16.5 gap-4">
-          <img src={Images.close} alt="" />
-          <Link to={routerPaths.home}>
+          <img src={Images.close} alt="" onClick={() => setOpen(false)} />
+          <Link to={routerPaths.home} onClick={() => setOpen(false)}>
             <img src={Images.AutodocLight} alt="" />
           </Link>
           <img src={Images.phone} alt="" />
@@ -60,6 +88,7 @@ const MenuBar = () => {
               className="flex justify-center text-center sm:text-[32px] leading-[90%] tracking-[-0.96px]"
               key={idx.toString()}
               to={item.to}
+              onClick={() => setOpen(false)}
             >
               {item.name}
             </Link>

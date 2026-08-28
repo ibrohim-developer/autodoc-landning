@@ -250,6 +250,22 @@
   transform: translateY(0) scale(1);
 }
 
+/* Touch devices keep a sticky :hover after a tap, which re-opened the menu the
+   moment the close button inside it was pressed — there, open state is explicit. */
+@media (hover: none) {
+  .menu-dropdown:hover > .dropdown-container {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-12px) scale(0.96);
+  }
+}
+
+.menu-dropdown.is-open > .dropdown-container {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
 .time-list {
   max-height: calc(100vh - 240px);
   overflow-y: auto;

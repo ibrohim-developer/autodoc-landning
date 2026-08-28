@@ -49,9 +49,13 @@ const LanguageSwitcher = ({ className }: Props) => {
 
   return (
     <div
-      className={`nav-bg ${className} dropdown rounded-xl py-4 px-5 flex items-center gap-8`}
+      className={`nav-bg ${className} dropdown rounded-xl py-[var(--nav-pad-y)] px-[var(--nav-pad-x)] flex items-center gap-[var(--nav-gap)]`}
     >
-      <img src={currentLanguageData.img} alt="" />
+      <img
+        src={currentLanguageData.img}
+        alt=""
+        className="h-[var(--nav-icon)] w-auto"
+      />
 
       <div className="dropdown-container flex flex-col gap-8.5">
         {list.map((item) => (

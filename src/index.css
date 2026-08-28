@@ -40,6 +40,26 @@
   --bg-amber-subtle: rgba(231, 186, 122, 0.15);
 
   --accent-lime: #d2f843;
+
+  /* Navbar scale. The bar was fixed px throughout, so it kept its full 68px
+     height and 881px width all the way down to 1024px, where that is 86% of
+     the screen. Every size in the bar derives from these, so the pills stay
+     in proportion and shrink continuously. Each upper bound = today's value. */
+  --nav-pad-y: clamp(0.625rem, 0.9vw, 1rem);        /* 10 -> 16  (py-4)      */
+  --nav-pad-x: clamp(0.875rem, 1.4vw, 1.25rem);     /* 14 -> 20  (px-5)      */
+  --nav-pad-x-menu: clamp(1rem, 1.7vw, 1.5rem);     /* 16 -> 24  (px-6)      */
+  --nav-gap: clamp(0.75rem, 2.2vw, 2rem);           /* 12 -> 32  (gap-8)     */
+  --nav-gap-menu: clamp(1.25rem, 4.6vw, 4.125rem);  /* 20 -> 66  (gap-16.5)  */
+  --nav-gap-bar: clamp(0.75rem, 1.4vw, 1.3125rem);  /* 12 -> 21  (gap-5.25)  */
+  --nav-logo: clamp(1.75rem, 2.5vw, 2.25rem);       /* 28 -> 36  (logo svg)  */
+  --nav-icon: clamp(1.125rem, 1.7vw, 1.5rem);       /* 18 -> 24  (burger)    */
+  --nav-icon-sm: clamp(0.875rem, 1.35vw, 1.1875rem);/* 14 -> 19  (phone)     */
+  --nav-text: clamp(0.875rem, 1.4vw, 1.25rem);      /* 14 -> 20  (text-20)   */
+  --nav-clock: clamp(1.25rem, 2.2vw, 2rem);         /* 20 -> 32  (text-32)   */
+  --nav-rule: clamp(1rem, 1.9vw, 1.6875rem);        /* 16 -> 27  (h-6.75)    */
+  /* height the bar actually occupies - use for page top clearance */
+  --nav-h: calc(var(--nav-logo) + var(--nav-pad-y) * 2);
+
 }
 
 html {
