@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import i18n from "@/i18";
-import Images from "@/assets/images";
 
 interface Props {
   className?: string;
@@ -12,18 +11,15 @@ const LanguageSwitcher = ({ className }: Props) => {
   const list = [
     {
       code: "ru",
-      name: "Русский",
-      img: Images.RU,
+      label: "RUS",
     },
     {
       code: "uz",
-      name: "O’zbek",
-      img: Images.UZ,
+      label: "UZB",
     },
     {
       code: "en",
-      name: "English",
-      img: Images.GB,
+      label: "ENG",
     },
   ];
 
@@ -51,21 +47,22 @@ const LanguageSwitcher = ({ className }: Props) => {
     <div
       className={`nav-bg ${className} dropdown rounded-xl py-[var(--nav-pad-y)] px-[var(--nav-pad-x)] flex items-center gap-[var(--nav-gap)]`}
     >
-      <img
-        src={currentLanguageData.img}
-        alt=""
-        className="h-[var(--nav-icon)] w-auto"
-      />
+      <div className="font-mono text-[length:var(--nav-text)] leading-[0.8]">
+        {currentLanguageData.label}
+      </div>
 
-      <div className="dropdown-container flex flex-col gap-8.5">
+      <div className="dropdown-container lang-dropdown flex flex-col">
         {list.map((item) => (
           <div
             key={item.code}
             onClick={() => changeLanguage(item.code)}
-            className="flex items-center gap-2.5 text-[12px] font-mono leading-none cursor-pointer"
+            className={`text-[length:var(--nav-text)] font-mono leading-[0.8] cursor-pointer transition-colors hover:text-white ${
+              item.code === currentLanguageData.code
+                ? "text-white"
+                : "text-white/60"
+            }`}
           >
-            <img src={item.img} alt="" />
-            {item.name}
+            {item.label}
           </div>
         ))}
       </div>

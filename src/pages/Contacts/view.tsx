@@ -1,5 +1,14 @@
 import Images from "@/assets/images";
+import {
+  fadeUp,
+  fadeUpCard,
+  fadeUpHero,
+  overlayFade,
+  REVEAL_VIEWPORT,
+  stagger,
+} from "@/helper/motion";
 import { Feedback } from "@/sections";
+import { motion } from "motion/react";
 import { useTranslation } from "react-i18next";
 
 const Contacts = () => {
@@ -32,20 +41,44 @@ const Contacts = () => {
   ];
   return (
     <>
-      <section
+      <motion.section
+        initial="hidden"
+        animate="visible"
+        variants={stagger(0.15, 0.1)}
         className="max-lg:p-4 min-h-screen relative bg-cover bg-no-repeat bg-center"
         style={{ backgroundImage: `url('${Images.contactsBg}')` }}
       >
-        <div className="bg-black60 absolute top-0 left-0 w-full h-full"></div>
+        <motion.div
+          variants={overlayFade}
+          className="bg-black60 absolute top-0 left-0 w-full h-full"
+        />
         <div className="relative pt-50 z-1">
-          <div className="title lg:mb-25 mb-6">{t("contacts")}</div>
-          <div className="lg:text-[60px] sm:text-[30px] max-w-350 lg:ml-31 leading-[110%] tracking-[-1.2px]">
+          <motion.div variants={fadeUpHero} className="title lg:mb-25 mb-6">
+            {t("contacts")}
+          </motion.div>
+          <motion.div
+            variants={fadeUpHero}
+            className="lg:text-[60px] sm:text-[30px] max-w-350 lg:ml-31 leading-[110%] tracking-[-1.2px]"
+          >
             {t("contactUsToDiscuss")}
-          </div>
+          </motion.div>
         </div>
-        <div className="grid lg:grid-cols-4 grid-cols-2 xl:mt-72.5 mt-12">
+        {/* Its own variant root — the contact tiles sit far below the hero on
+            desktop (xl:mt-72.5), so they wait for the scroll rather than
+            inheriting the section's mount ladder. */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={REVEAL_VIEWPORT}
+          variants={stagger(0.1)}
+          className="grid lg:grid-cols-4 grid-cols-2 xl:mt-72.5 mt-12"
+        >
           {list.map((item, idx) => (
-            <div key={idx.toString()} className="xl:p-10 p-4 bg-blur">
+            <motion.div
+              key={idx.toString()}
+              variants={fadeUpCard}
+              className="xl:p-10 p-4 bg-blur"
+            >
               <div className="md:w-18 w-14 md:h-17 h-13 flex items-center justify-center rounded-xl bg-green">
                 <img src={item.img} className="max-md:max-w-[60%] max-md:max-h-[60%]" alt="" />
               </div>
@@ -58,12 +91,20 @@ const Contacts = () => {
               <div className="font-mono md:leading-[200%] leading-[130%] tracking-[-0.48px] uppercase">
                 {item.info}
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
-      </section>
-      <img src={Images.map} className="w-full max-h-[80vh] object-cover" alt="" />
-      <Feedback/>
+        </motion.div>
+      </motion.section>
+      <motion.img
+        initial="hidden"
+        whileInView="visible"
+        viewport={REVEAL_VIEWPORT}
+        variants={fadeUp}
+        src={Images.map}
+        className="w-full max-h-[80vh] object-cover"
+        alt=""
+      />
+      <Feedback />
     </>
   );
 };

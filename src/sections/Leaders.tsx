@@ -1,4 +1,6 @@
 import { Images } from "@/assets/images";
+import { fadeUpItem, REVEAL_VIEWPORT, stagger } from "@/helper/motion";
+import { motion } from "motion/react";
 import { useTranslation } from "react-i18next";
 
 /* Bottom scrim keeps the names legible over four photos shot in very different
@@ -41,10 +43,20 @@ const Leaders = () => {
   ];
 
   return (
-    <section className="grid xl:grid-cols-4 grid-cols-2">
+    <motion.section
+      id="leaders"
+      initial="hidden"
+      whileInView="visible"
+      viewport={REVEAL_VIEWPORT}
+      variants={stagger(0.1)}
+      className="scroll-mt-24 grid xl:grid-cols-4 grid-cols-2"
+    >
       {leadership.map((leader, idx) => (
-        <article
+        /* The <article> animates directly — .leader-card's corner squares are
+           :nth-child / :not(:last-child) rules, so a wrapper would break them. */
+        <motion.article
           key={leader.name}
+          variants={fadeUpItem}
           className="leader-card group relative max-sm:h-88 max-xl:h-140 xl:max-[1700px]:h-120 h-167 border-b-[1.3px] border-t-[1.3px] border-white20 not-last:border-r-[1.3px]"
         >
           {/* Inner wrapper clips the zoom without clipping the
@@ -73,9 +85,9 @@ const Leaders = () => {
               </p>
             </div>
           </div>
-        </article>
+        </motion.article>
       ))}
-    </section>
+    </motion.section>
   );
 };
 

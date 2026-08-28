@@ -8,7 +8,7 @@ interface Props {
 
 const AdvertisingCard = ({ card }: Props) => {
   return (
-    <div className="xl:p-10 p-4 bg-blur">
+    <div className="xl:p-10 p-4 h-full bg-blur">
       <img
         src={card.img}
         className="rounded-3xl max-xl:w-20 max-xl:h-20 w-27 h-27 object-cover min-[1300px]:max-[1700px]:mb-8 mb-30 max-xl:mb-4"

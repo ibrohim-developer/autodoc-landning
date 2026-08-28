@@ -1,19 +1,46 @@
-import { useRef, useState } from "react";
-import { motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { motion, useInView } from "motion/react";
 import Images from "@/assets/images";
 import { Videos } from "@/assets/video";
 
 const Video = () => {
+  const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+
+  /* Once someone hits pause themselves, scrolling away and back must not start
+     it up again — the scroll trigger only drives a reel the viewer has not
+     taken control of. Kept in a ref: nothing renders off it. */
+  const pausedByUserRef = useRef(false);
+
+  const inView = useInView(sectionRef, { amount: 0.5 });
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (!inView) {
+      video.pause();
+      return;
+    }
+
+    if (pausedByUserRef.current) return;
+
+    /* Muted + playsInline satisfies autoplay policy, but the promise still
+       rejects if the browser refuses or a pause interrupts the play. The UI
+       falls back to the play button on its own, so swallow it. */
+    video.play().catch(() => {});
+  }, [inView]);
 
   const handlePlay = async () => {
     if (!videoRef.current) return;
 
     if (videoRef.current.paused) {
-      await videoRef.current.play();
+      pausedByUserRef.current = false;
+      await videoRef.current.play().catch(() => {});
       setIsPlaying(true);
     } else {
+      pausedByUserRef.current = true;
       videoRef.current.pause();
       setIsPlaying(false);
     }
@@ -21,6 +48,7 @@ const Video = () => {
 
   return (
     <section
+      ref={sectionRef}
       className="md:h-screen h-[50vh] relative bg-no-repeat bg-cover bg-center"
       style={{
         backgroundImage: `url('${Images.pattern}'), url('${Images.media}')`,

@@ -6,6 +6,8 @@ import "swiper/css/navigation";
 import Images from "@/assets/images";
 import { Navigation } from "swiper/modules";
 import { InstagramReelsCard } from "@/components";
+import { fadeUp, fadeUpItem, REVEAL_VIEWPORT, stagger } from "@/helper/motion";
+import { motion } from "motion/react";
 import { useTranslation } from "react-i18next";
 
 const Reels = () => {
@@ -31,8 +33,20 @@ const Reels = () => {
     },
   ];
   return (
-    <div className="md:px-2 sm:px-8">
-      <div className="relative min-[1700px]:w-[1800px] xl:max-2xl:w-full lg:max-xl:w-[80%] md:max-lg:w-[80%] mx-auto">
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={REVEAL_VIEWPORT}
+      variants={stagger(0.15)}
+      className="md:px-2 sm:px-8"
+    >
+      {/* The carousel reveals as one block. Per-slide variants would mean a
+          scale/opacity transform on elements Swiper measures and positions
+          itself — fadeUp is deliberately translate-only for the same reason. */}
+      <motion.div
+        variants={fadeUp}
+        className="relative min-[1700px]:w-[1800px] xl:max-2xl:w-full lg:max-xl:w-[80%] md:max-lg:w-[80%] mx-auto"
+      >
         <Swiper
           breakpoints={{
             868: {
@@ -57,11 +71,7 @@ const Reels = () => {
         >
           {list.map((item, idx) => (
             <SwiperSlide key={idx.toString()}>
-              <InstagramReelsCard
-                url={item.url}
-                width={"100%"}
-                className="2xl:h-172.5 xl:h-126 lg:h-106 md:h-113 h-132"
-              />
+              <InstagramReelsCard url={item.url} className="w-full" />
             </SwiperSlide>
           ))}
         </Swiper>
@@ -73,15 +83,16 @@ const Reels = () => {
             <img src={Images.reelsArrow} className="-rotate-180" alt="" />
           </div>
         </div>
-      </div>
-      <a
+      </motion.div>
+      <motion.a
+        variants={fadeUpItem}
         href="https://www.instagram.com/autodoc_holding/?utm_source=ig_embed&ig_rid=ABWV4N70kILtqJkIHzXtVuX"
         target="_blank"
         className="min-[1700px]:w-323.75 md:text-[20px] leading-[90%] tracking-[-0.48px] font-mono mx-auto text-black! bg-white md:h-26.5 text-center flex items-center justify-center gap-8 px-6 max-md:py-4 mt-7.5"
       >
         {t("viewOnInstagram")} <img src={Images.reelsIcon} alt="" />
-      </a>
-    </div>
+      </motion.a>
+    </motion.div>
   );
 };
 

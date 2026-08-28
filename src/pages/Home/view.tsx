@@ -178,34 +178,41 @@ const Home = () => {
                 t("intelligentSystemsAndAnalytics"),
                 t("digitalInfrastructure"),
               ].map((item, index) => (
+                /* Entrance and hover are split across two elements on
+                   purpose. Leaving a hover animates back to the elements own
+                   animate state, so any delay reachable from that state - on
+                   the transition prop OR inside the target - is spent again on
+                   the way out. The staggered entrance therefore has to live on
+                   a wrapper the hover never touches. */
                 <motion.div
                   key={item}
                   initial={{
                     opacity: 0,
                     x: -25,
                   }}
-                  animate={
-                    heroLoaded
-                      ? {
-                          opacity: 1,
-                          x: 0,
-                        }
-                      : {}
-                  }
+                  animate={heroLoaded ? { opacity: 1, x: 0 } : {}}
                   transition={{
                     duration: 0.6,
                     delay: 1.15 + index * 0.12,
                     ease: "easeOut",
                   }}
-                  whileHover={{
-                    x: 6,
-                    transition: {
-                      duration: 0.25,
-                    },
-                  }}
-                  className="uppercase rounded-xl tracking-[-0.48px] max-sm:text-[13px] sm:leading-[0.8] py-[clamp(0.75rem,1.1vw,1.3125rem)] px-3 font-mono bg-limon cursor-default"
                 >
-                  {item}
+                  {/* Rest state is bare - no delay is reachable from it - so
+                      the prop below times the return honestly. Engage stays
+                      quick; only the settle back is drawn out. */}
+                  <motion.div
+                    whileHover={{
+                      x: 6,
+                      transition: { duration: 0.18, ease: "easeOut" },
+                    }}
+                    transition={{
+                      duration: 0.5,
+                      ease: "easeOut",
+                    }}
+                    className="uppercase rounded-xl tracking-[-0.48px] max-sm:text-[13px] sm:leading-[0.8] py-[clamp(0.75rem,1.1vw,1.3125rem)] px-3 font-mono bg-limon cursor-default"
+                  >
+                    {item}
+                  </motion.div>
                 </motion.div>
               ))}
             </div>

@@ -43,11 +43,15 @@
 .leader-card:nth-child(4)::before {
   display: none;
 }
+/* Bebas Neue per Figma. It is caps-only and far narrower than GeistMono, so the
+   old -18px (-0.09em) tracking would overlap glyphs; -0.02em suits the condensed
+   face. Tracking is in em now, so it scales with every font-size step below and
+   the per-breakpoint letter-spacing overrides are gone. */
 .title {
   font-size: 200px;
   line-height: 1.1;
-  letter-spacing: -18px;
-  font-family: var(--font-mono);
+  letter-spacing: -0.02em;
+  font-family: var(--font-bebas);
 }
 
 /* Hero wordmark. "AUTODOC" in Bebas Neue is 2.756em of advance; with the
@@ -266,6 +270,17 @@
   transform: translateY(0) scale(1);
 }
 
+/* Language menu. The codes replaced flag rows, which left the panel narrower
+   than the pill above it. Matching the pill's width and padding puts the codes
+   in one column under the trigger instead of a floating sliver. */
+.lang-dropdown {
+  width: 100%;
+  padding: var(--nav-pad-y) var(--nav-pad-x);
+  /* 16 -> 24, same curve as the bar's other spacing so the rows keep their
+     breathing room relative to the panel padding as the navbar scales down. */
+  gap: clamp(1rem, 1.7vw, 1.5rem);
+}
+
 .time-list {
   max-height: calc(100vh - 240px);
   overflow-y: auto;
@@ -294,7 +309,6 @@
 @media (min-width: 1024px) and (max-width: 1280px) {
   .title {
     font-size: 100px;
-    letter-spacing: -8px;
   }
   .showreel-circle,
   .showreel-circle-bottom {
@@ -330,13 +344,11 @@
 @media (min-width: 540px) and (max-width: 868px) {
   .title {
     font-size: 80px;
-    letter-spacing: -5px;
   }
 }
 @media (max-width: 540px) {
   .title {
     font-size: 40px;
-    letter-spacing: -2px;
   }
   .showreel-circle,
   .showreel-circle-bottom {

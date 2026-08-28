@@ -6,7 +6,10 @@
   --font-serif: "EBGaramond", "EB Garamond", serif;
   --font-display: "EBGaramond", "EB Garamond", serif;
   --font-mono: "GeistMono", "SFMono-Regular", "Consolas", monospace;
-  --font-bebas: "BebasNeue";
+  /* BebasNeue ships Latin only - 0 of 256 Cyrillic glyphs. GeistMono is next in
+     the chain so RU titles keep their current rendering instead of dropping to
+     the browser default serif. Swap in a Cyrillic-capable Bebas to fix it. */
+  --font-bebas: "BebasNeue", "GeistMono", "SFMono-Regular", sans-serif;
   /* fonts end */
   --color-white10: #ffffff1a;
   --color-white12: #ffffff1f;

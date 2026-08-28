@@ -1,8 +1,9 @@
 import Images from "@/assets/images";
 import { AreaCard } from "@/components";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion } from "framer-motion";
+import { fadeUp, REVEAL_VIEWPORT, stagger } from "@/helper/motion";
 
 const AreasOfActivity = () => {
   const { t } = useTranslation();
@@ -334,12 +335,15 @@ const AreasOfActivity = () => {
   const [titleFirstWord, ...titleRestWords] =
     t("directionsOfActivity").split(" ");
 
-  useEffect(() => {
-    sectionRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  }, [activeFilter]);
+  // Snapping the grid back to the top belongs to the click, not to a
+  // useEffect on activeFilter: an effect also runs on mount, and its smooth
+  // scroll outlived MainLayout's window.scrollTo(0, 0), so every navigation
+  // to "/" parked the user in the middle of the page.
+  const handleFilterClick = (key: string) => {
+    setActiveFilter(key);
+    sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <section
       ref={sectionRef}
@@ -348,8 +352,22 @@ const AreasOfActivity = () => {
     >
       <div className="bg-black60 absolute top-0 left-0 w-full h-full"></div>
       <div className="relative z-1">
-        <div className="title">{titleFirstWord}</div>
-        <div className="title text-right">{titleRestWords.join(" ")}</div>
+        {/* Two lines stagger so the eye tracks left-to-right into the grid.
+            Reveal only — the AnimatePresence below is a filter swap, which
+            re-runs on every category change and never covered the heading. */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={REVEAL_VIEWPORT}
+          variants={stagger(0.12)}
+        >
+          <motion.div variants={fadeUp} className="title">
+            {titleFirstWord}
+          </motion.div>
+          <motion.div variants={fadeUp} className="title text-right">
+            {titleRestWords.join(" ")}
+          </motion.div>
+        </motion.div>
         <div className="flex gap-12.5 mt-8">
           <div className="max-xl:hidden sticky top-5 flex flex-col gap-y-6.5 h-max w-120 flex-none backdrop-blur-[23px] bg-white10 px-12.5 py-13.5">
             {filters.map((item, idx) => {
@@ -358,7 +376,7 @@ const AreasOfActivity = () => {
               return (
                 <div
                   key={idx}
-                  onClick={() => setActiveFilter(item.key)}
+                  onClick={() => handleFilterClick(item.key)}
                   className={`${isActive && "text-[22px]"} hover:text-[#98b431] cursor-pointer transition-all
                     duration-300 font-mono uppercase leading-[130%] flex items-center justify-between gap-x-6`}
                 >
