@@ -34,7 +34,7 @@ const Home = () => {
         className="sm:h-svh sm:min-h-150 relative overflow-hidden bg-[#0a0a0a]"
         onMouseMove={handleMouseMove}
       >
-        {/* Background Image + Parallax */}
+        {/* Background Image + Parallax S*/}
         <motion.div
           className="absolute inset-0"
           animate={{
@@ -162,13 +162,14 @@ const Home = () => {
                     }
                   : {}
               }
-              transition={{
+              transition={{ 
                 duration: 0.8,
                 delay: 1,
               }}
               className="text-[length:clamp(1rem,1.79vw_+_0.36rem,2.5rem)] mt-[clamp(1rem,1.7vw,2rem)] mb-[clamp(1.5rem,4vw,4.75rem)] tracking-[-0.3px] leading-[0.9]"
             >
-              {t("createDigitalFuture")} {t("createDigitalFutureDesc")} {t("withoutBureaucracy")}.
+              {t("createDigitalFuture")} {t("createDigitalFutureDesc")}{" "}
+              {t("withoutBureaucracy")}.
             </motion.div>
 
             {/* Tags */}

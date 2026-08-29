@@ -66,18 +66,20 @@ const MenuBar = () => {
         />
       </Link>
       <img src={Images.phone} alt="" className="w-[var(--nav-icon-sm)]" />
-      <div className="dropdown-container max-sm:w-full">
-        <div className="flex flex-col gap-4.5">
-          {list.map((item, idx) => (
-            <Link
-              className="flex justify-center text-center sm:text-[32px] leading-[90%] tracking-[-0.96px]"
-              key={idx.toString()}
-              to={item.to}
-              onClick={() => setOpen(false)}
-            >
-              {item.name}
-            </Link>
-          ))}
+      <div className="dropdown-container max-sm:w-full" inert={!open}>
+        <div className="menu-panel">
+          <div className="flex flex-col gap-4.5">
+            {list.map((item, idx) => (
+              <Link
+                className="flex justify-center text-center sm:text-[32px] leading-[90%] tracking-[-0.96px]"
+                key={idx.toString()}
+                to={item.to}
+                onClick={() => setOpen(false)}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </div>

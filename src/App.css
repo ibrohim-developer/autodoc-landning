@@ -43,22 +43,14 @@
 .leader-card:nth-child(4)::before {
   display: none;
 }
-/* Bebas Neue per Figma. It is caps-only and far narrower than GeistMono, so the
-   old -18px (-0.09em) tracking would overlap glyphs; -0.02em suits the condensed
-   face. Tracking is in em now, so it scales with every font-size step below and
-   the per-breakpoint letter-spacing overrides are gone. */
+
 .title {
   font-size: 200px;
   line-height: 1.1;
-  letter-spacing: -0.02em;
-  font-family: var(--font-bebas);
+  letter-spacing: -0.09em;
+  font-family: var(--font-mono);
 }
 
-/* Hero wordmark. "AUTODOC" in Bebas Neue is 2.756em of advance; with the
-   tracking below the rendered word is ~2.34em, so 22.6vw keeps it at the
-   Figma ratio (~48% of the screen) at EVERY width instead of jumping
-   between breakpoints. bottom:-0.2em sits the baseline on the container's
-   bottom edge at any font-size, replacing the per-breakpoint px nudges. */
 .header-title {
   font-size: clamp(3.5rem, 22.6vw - 1.72rem, 34rem);
   letter-spacing: -0.059em;
@@ -225,6 +217,21 @@
   cursor: pointer;
 }
 
+.nav-bg.dropdown:not(.menu-dropdown) {
+  background-color: transparent;
+  backdrop-filter: none;
+}
+
+.dropdown:not(.menu-dropdown)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background-color: #0000004d;
+  backdrop-filter: blur(25.700000762939453px);
+}
+
 .dropdown-container {
   position: absolute;
   top: calc(100% + 28px);
@@ -234,11 +241,9 @@
   border-radius: 12px;
   padding: 18px 20px;
 
-  /* Animation. visibility is a discrete property: given a duration it flips at
-     the halfway mark, which left every panel unpainted for the first half of its
-     own opening animation — it appeared out of nowhere, already half done. So it
-     is switched at 0s instead, at the near edge when opening and at the far edge
-     when closing, and the visible motion is left entirely to opacity/clip-path. */
+  background-color: var(--nav-panel-bg);
+  backdrop-filter: blur(25.700000762939453px);
+
   opacity: 0;
   visibility: hidden;
   transform: translateY(-12px) scale(0.96);
@@ -250,53 +255,18 @@
     visibility 0s linear 0.3s;
 }
 
-/* The fill and its blur ride on their own static layer instead of on the panel
-   itself. clip-path is not a compositable property, so the menu's unroll is
-   repainted on the main thread every frame - and while the blur sat on the
-   animating box, each of those frames re-sampled a full-width backdrop through a
-   25.7px blur, which is what made the unroll stutter. This layer is painted once
-   and the clip above it just masks the finished texture; will-change keeps it on
-   its own compositor layer so the parent's changing clip cannot dirty it.
-
-   z-index: -1 puts it behind the panel's own content. It stays inside the panel:
-   all three containers establish a stacking context already (clip-path on the
-   menu, opacity/transform on the other two), so it cannot fall behind the bar. */
-.dropdown-container::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  background: var(--nav-panel-bg);
-  backdrop-filter: blur(25.700000762939453px);
-  will-change: transform;
-}
-
-/* Every navbar panel is click-driven — the pill toggles .is-open. Hover is not a
-   trigger: on touch the sticky :hover state left panels open after a tap.
-
-   :not(.menu-dropdown) keeps the menu bar out of this rule entirely. The menu
-   panel unrolls (clip-path) instead of fading, and it used to depend on its own
-   rule merely being written later in the file to beat this one — same
-   specificity, so source order was the only thing choosing between the two
-   `transition` shorthands. Whenever this one won, clip-path was not in the
-   transition list and the panel snapped open while still closing normally. Now
-   the selectors are mutually exclusive and order cannot decide it. */
 .dropdown.is-open:not(.menu-dropdown) > .dropdown-container {
   opacity: 1;
   visibility: visible;
   transform: translateY(0) scale(1);
 
+  /* opacity at 0s is the whole point of the split — see the closed rule above. */
   transition:
-    opacity 0.3s ease,
+    opacity 0s,
     transform 0.3s ease,
     visibility 0s;
 }
 
-/* The panel hangs straight off the bar's bottom edge — no gap, and it tracks the
-   bar's width exactly (the shared min-width: max-content would otherwise size it
-   to the longest link, leaving it short of the bar's right edge). Its top corners
-   stay square so the two read as one surface while it is open. */
 .menu-dropdown > .dropdown-container {
   top: 100%;
   width: 100%;
@@ -304,64 +274,82 @@
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 
-  /* It unrolls from the bar's edge downward instead of fading in: fully opaque
-     and untransformed at all times, clipped to zero height while closed, and the
-     clip retracts to reveal the links row by row. The clip rect keeps the bottom
-     corners rounded as it travels, so the leading edge reads as the panel's own
-     edge rather than a square wipe. */
+  overflow: hidden;
+  padding: 0;
+  border-radius: 0;
   opacity: 1;
   transform: none;
-  clip-path: inset(0 0 100% 0 round 0 0 12px 12px);
-
-  transition:
-    clip-path 0.55s cubic-bezier(0.33, 1, 0.68, 1),
-    visibility 0s linear 0.55s;
-}
-
-/* The panel now carries its own visibility — it is no longer sharing the
-   generic .is-open rule above, which is what used to supply it. */
-.menu-dropdown.is-open > .dropdown-container {
   visibility: visible;
-  clip-path: inset(0 0 0 0 round 0 0 12px 12px);
+  transition: none;
 
-  transition:
-    clip-path 0.55s cubic-bezier(0.33, 1, 0.68, 1),
-    visibility 0s;
+  background: none;
+  backdrop-filter: none;
 }
 
-/* ...and the bar meets it: square bottom corners, and it restates the panel's
-   fill so the two stay one surface even if that token stops matching .nav-bg.
-   The swap is instant on open and waits out the roll-up on close (see the
-   delayed transition below) - otherwise closing flashes a strip of the wrong
-   shade above a panel that is still on screen. */
-.menu-dropdown {
-  transition:
-    background-color 0s linear 0.55s,
-    border-radius 0s linear 0.55s;
+.menu-panel {
+  overflow: hidden;
+  border-radius: 0 0 12px 12px;
+  background: var(--nav-panel-bg);
+  backdrop-filter: blur(25.700000762939453px);
+
+  transform: translateY(-100%);
+  will-change: transform;
+
+  transition: transform 0.4s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.menu-panel > * {
+  padding: 18px 20px;
+
+  transform: translateY(100%);
+  will-change: transform;
+
+  transition: transform 0.4s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.menu-dropdown.is-open .menu-panel,
+.menu-dropdown.is-open .menu-panel > * {
+  transform: translateY(0);
+
+  transition: transform 0.55s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.nav-bg.menu-dropdown {
+  background-color: transparent;
+  backdrop-filter: none;
+
+  transition: border-radius 0s linear 0.4s;
+}
+
+.menu-dropdown::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background-color: #0000004d;
+  backdrop-filter: blur(25.700000762939453px);
+
+  transition: background-color 0s linear 0.4s;
 }
 
 .menu-dropdown.is-open {
-  background-color: var(--nav-panel-bg);
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   transition: none;
 }
 
-/* Language menu. The rows are full language names now, so the panel is wider
-   than the pill it hangs from: min-width keeps it flush with the trigger while
-   the content decides the real width. Padding matches the pill so the names
-   line up with the code above them. */
+.menu-dropdown.is-open::before {
+  background-color: var(--nav-panel-bg);
+  transition: none;
+}
+
 .lang-dropdown {
   min-width: 100%;
   padding: var(--nav-pad-y) var(--nav-pad-x);
-  /* 16 -> 24, same curve as the bar's other spacing so the rows keep their
-     breathing room relative to the panel padding as the navbar scales down. */
   gap: clamp(1rem, 1.7vw, 1.5rem);
 }
 
-/* The clock pill is far narrower than the zone list it opens, so the panel hangs
-   off its right edge and grows leftward — anchored to the left it would shoot out
-   past the navbar and off screen. */
 .time-dropdown > .dropdown-container {
   left: auto;
   right: 0;
@@ -442,15 +430,7 @@
     width: 200px;
     height: 200px;
   }
-  /* Phones: the panel covers most of the screen, so it goes opaque rather than
-     letting the page read through it. Targets the fill layer, not the panel. */
-  .dropdown-container::before {
-    background: black;
-    backdrop-filter: blur(28px);
-  }
-  .menu-dropdown.is-open {
-    background-color: black;
-  }
+
   .field {
     font-size: 16px;
     padding: 12px 14px;
@@ -503,22 +483,6 @@
   }
 }
 
-/* ── Career: "from idea to result" metal wave ─────────────────────────────
-   The Figma export is grain-on-white moire and the grain is not a texture
-   sitting on the artwork - it IS the artwork. The bands exist only as density
-   variation in the stipple, so blurring the grain out and regenerating it with
-   feTurbulence (40KB, tried first) destroyed the thing it was meant to keep:
-   procedural noise reads as fine film grain, the export is chunky high-contrast
-   dithering. Hence the real pixels, at full 3840.
-
-   Resolution is not optional either. inset -12% plus the 1.14 end scale paint
-   this layer at ~2714 css px on a 1920 viewport, so a 2x screen asks for 5428
-   device px; anything under 3840 merges the dots back into a gradient.
-
-   Two copies counter-drift against each other. Moire is an interference
-   pattern, so sliding one over the other genuinely reshapes the bands rather
-   than panning a photo, and it costs two composited transforms and no filter
-   work. Source image comes in as --metal-wave-src. */
 .metal-wave {
   position: absolute;
   inset: -12%;
@@ -531,10 +495,6 @@
   animation: metal-drift-a 42s ease-in-out infinite alternate;
 }
 .metal-wave--b {
-  /* darken, not multiply: multiply compounds and drags the whole band to a mid
-     sage. darken takes the min per channel, so the palette stays where the
-     designer put it. 0.3 holds the composite at ~196,209,198 against the
-     export's own 204,215,206 while still letting the bands interfere. */
   mix-blend-mode: darken;
   opacity: 0.3;
   animation: metal-drift-b 63s ease-in-out infinite alternate;

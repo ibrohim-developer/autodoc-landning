@@ -96,7 +96,7 @@ const Time = ({ className }: Props) => {
 
       <div className="dropdown-container" onClick={(e) => e.stopPropagation()}>
         {/* Uzbekistan */}
-        <div className="flex items-center gap-3 bg-black30 backdrop-blur-[25.7px] rounded-xl py-4 px-5">
+        <div className="flex items-center gap-3 bg-black30 rounded-xl py-4 px-5">
           <div className="text-[20px] w-52 leading-[0.8]">
             {t("uzbekistan")} ({getGMT(uzbekistanTimezone)})
           </div>
@@ -109,7 +109,10 @@ const Time = ({ className }: Props) => {
         {/* Cities */}
         <div className="time-list">
           {cities.map((city, idx) => (
-            <div key={idx.toString()} className="flex items-center gap-3 mt-4.5">
+            <div
+              key={idx.toString()}
+              className="flex items-center gap-3 mt-4.5"
+            >
               <div className="text-[14px] w-57 leading-[130%] font-mono">
                 {city.name}
               </div>
